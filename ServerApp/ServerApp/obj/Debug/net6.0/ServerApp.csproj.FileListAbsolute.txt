@@ -1,0 +1,14 @@
+D:\Anej\Code\ServerApp\ServerApp\bin\Debug\net6.0\ServerApp.exe
+D:\Anej\Code\ServerApp\ServerApp\bin\Debug\net6.0\ServerApp.deps.json
+D:\Anej\Code\ServerApp\ServerApp\bin\Debug\net6.0\ServerApp.runtimeconfig.json
+D:\Anej\Code\ServerApp\ServerApp\bin\Debug\net6.0\ServerApp.dll
+D:\Anej\Code\ServerApp\ServerApp\bin\Debug\net6.0\ServerApp.pdb
+D:\Anej\Code\ServerApp\ServerApp\obj\Debug\net6.0\ServerApp.GeneratedMSBuildEditorConfig.editorconfig
+D:\Anej\Code\ServerApp\ServerApp\obj\Debug\net6.0\ServerApp.AssemblyInfoInputs.cache
+D:\Anej\Code\ServerApp\ServerApp\obj\Debug\net6.0\ServerApp.AssemblyInfo.cs
+D:\Anej\Code\ServerApp\ServerApp\obj\Debug\net6.0\ServerApp.csproj.CoreCompileInputs.cache
+D:\Anej\Code\ServerApp\ServerApp\obj\Debug\net6.0\ServerApp.dll
+D:\Anej\Code\ServerApp\ServerApp\obj\Debug\net6.0\refint\ServerApp.dll
+D:\Anej\Code\ServerApp\ServerApp\obj\Debug\net6.0\ServerApp.pdb
+D:\Anej\Code\ServerApp\ServerApp\obj\Debug\net6.0\ServerApp.genruntimeconfig.cache
+D:\Anej\Code\ServerApp\ServerApp\obj\Debug\net6.0\ref\ServerApp.dll

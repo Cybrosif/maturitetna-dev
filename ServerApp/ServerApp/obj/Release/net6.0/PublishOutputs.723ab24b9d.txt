@@ -1,0 +1,5 @@
+D:\Anej\Code\maturitetna-program\ServerApp.exe
+D:\Anej\Code\maturitetna-program\ServerApp.dll
+D:\Anej\Code\maturitetna-program\ServerApp.deps.json
+D:\Anej\Code\maturitetna-program\ServerApp.runtimeconfig.json
+D:\Anej\Code\maturitetna-program\ServerApp.pdb

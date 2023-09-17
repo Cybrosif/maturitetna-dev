@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+  <metadata>
+    <id>ServerApp</id>
+    <version>1.0.0</version>
+    <authors>ServerApp</authors>
+    <description>Package Description</description>
+    <dependencies>
+      <group targetFramework="net6.0" />
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="D:\Anej\Code\ServerApp\ServerApp\bin\Debug\net6.0\ServerApp.runtimeconfig.json" target="lib\net6.0\ServerApp.runtimeconfig.json" />
+    <file src="D:\Anej\Code\ServerApp\ServerApp\bin\Debug\net6.0\ServerApp.dll" target="lib\net6.0\ServerApp.dll" />
+  </files>
+</package>
