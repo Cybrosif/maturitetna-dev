@@ -6,6 +6,10 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using SystemInfo;
+using MQTT;
+using MQTTnet;
+using MQTTnet.Client;
+using MQTTnet.Protocol;
 
 
 namespace ServerApp
@@ -15,10 +19,13 @@ namespace ServerApp
 		static void Main(string[] args)
 		{
 			SystemInfo.SystemInfo systemInfo = new SystemInfo.SystemInfo();
+			MQTT.mqtt mqtt = new MQTT.mqtt();
+			
 
 			while (true)
 			{
-				double cpuUsage = systemInfo.getCpuUsage;
+				mqtt.Publish_Application_Message();
+				/*double cpuUsage = systemInfo.getCpuUsage;
 
 				(ulong totalMemory, ulong freeMemory, ulong usedMemory) = systemInfo.getMemoryUsage;
 
@@ -37,8 +44,8 @@ namespace ServerApp
 
 				Console.WriteLine($"Upitme: {uptime}");
 
-				Console.WriteLine();
-				System.Threading.Thread.Sleep(1000); // Sleep for 1 second (adjust as needed).
+				Console.WriteLine();*/
+				System.Threading.Thread.Sleep(1000); // Sleep for 1 second 
 			}
 		}
 	}

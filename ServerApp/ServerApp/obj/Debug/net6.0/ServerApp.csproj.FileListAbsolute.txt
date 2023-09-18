@@ -26,3 +26,6 @@ D:\Anej\Code\maturitetna-dev\ServerApp\ServerApp\obj\Debug\net6.0\refint\ServerA
 D:\Anej\Code\maturitetna-dev\ServerApp\ServerApp\obj\Debug\net6.0\ServerApp.pdb
 D:\Anej\Code\maturitetna-dev\ServerApp\ServerApp\obj\Debug\net6.0\ServerApp.genruntimeconfig.cache
 D:\Anej\Code\maturitetna-dev\ServerApp\ServerApp\obj\Debug\net6.0\ref\ServerApp.dll
+D:\Anej\Code\maturitetna-dev\ServerApp\ServerApp\bin\Debug\net6.0\MQTTnet.dll
+D:\Anej\Code\maturitetna-dev\ServerApp\ServerApp\obj\Debug\net6.0\ServerApp.csproj.AssemblyReference.cache
+D:\Anej\Code\maturitetna-dev\ServerApp\ServerApp\obj\Debug\net6.0\ServerApp.csproj.CopyComplete

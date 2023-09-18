@@ -39,6 +39,12 @@
       "frameworks": {
         "net6.0": {
           "targetAlias": "net6.0",
+          "dependencies": {
+            "MQTTnet": {
+              "target": "Package",
+              "version": "[4.3.1.873, )"
+            }
+          },
           "imports": [
             "net461",
             "net462",
