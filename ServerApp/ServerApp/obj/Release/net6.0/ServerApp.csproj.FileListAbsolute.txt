@@ -29,3 +29,4 @@ D:\Anej\Code\maturitetna-dev\ServerApp\ServerApp\obj\Release\net6.0\refint\Serve
 D:\Anej\Code\maturitetna-dev\ServerApp\ServerApp\obj\Release\net6.0\ServerApp.pdb
 D:\Anej\Code\maturitetna-dev\ServerApp\ServerApp\obj\Release\net6.0\ServerApp.genruntimeconfig.cache
 D:\Anej\Code\maturitetna-dev\ServerApp\ServerApp\obj\Release\net6.0\ref\ServerApp.dll
+D:\Anej\Code\maturitetna-dev\ServerApp\ServerApp\bin\Release\net6.0\Newtonsoft.Json.dll

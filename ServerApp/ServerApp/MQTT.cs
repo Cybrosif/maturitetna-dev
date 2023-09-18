@@ -11,7 +11,7 @@ namespace MQTT
 {
 	public class mqtt
 	{
-		public static async Task Publish_Application_Message()
+		public static async Task Publish_Application_Message(string json)
 		{
 
 			var mqttFactory = new MqttFactory();
@@ -19,14 +19,14 @@ namespace MQTT
 			using (var mqttClient = mqttFactory.CreateMqttClient())
 			{
 				var mqttClientOptions = new MqttClientOptionsBuilder()
-					.WithTcpServer("test.mosquitto.org", 1883)
+					.WithTcpServer("91.121.93.94", 1883)
 					.Build();
 
 				await mqttClient.ConnectAsync(mqttClientOptions, CancellationToken.None);
 
 				var applicationMessage = new MqttApplicationMessageBuilder()
 					.WithTopic("test/test123")
-					.WithPayload("testtest")
+					.WithPayload(json)
 					.Build();
 
 				await mqttClient.PublishAsync(applicationMessage, CancellationToken.None);
