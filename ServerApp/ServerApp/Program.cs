@@ -1,64 +1,69 @@
 ﻿using System;
-using System.Net.Http;
+using System.Timers;
 using System.Threading;
-using System.Threading.Tasks;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
+using Newtonsoft.Json;
 using SystemInfo;
 using MQTT;
-using MQTTnet;
 using MQTTnet.Client;
-using MQTTnet.Protocol;
-using Newtonsoft.Json;
-
 
 namespace ServerApp
 {
-	public class Program
-	{
-		static void Main(string[] args)
-		{
-			SystemInfo.SystemInfo systemInfo = new SystemInfo.SystemInfo();
-			MQTT.mqtt mqtt = new MQTT.mqtt();
-			
+    public class Program
+    {
+        private static SystemInfo.SystemInfo systemInfo;
+        private static MQTT.mqtt mqtt;
+        private static string topic = "test/test123";
 
-			while (true)
-			{
-				
-				double cpuUsage = systemInfo.getCpuUsage;
-				(ulong totalMemory, ulong freeMemory, ulong usedMemory) = systemInfo.getMemoryUsage;
-				(string fileSystem, long totalSizeMB, long availableFreeSpaceMB) = systemInfo.getDiskInfo;
-				TimeSpan uptime = systemInfo.getSystemUptime;
-				var systemInfoData = new
-				{
-					CpuUsage = cpuUsage,
-					TotalMemoryMB = totalMemory / (1024 * 1024),
-					FreeMemoryMB = freeMemory / (1024 * 1024),
-					UsedMemoryMB = usedMemory / (1024 * 1024),
-					FileSystem = fileSystem,
-					TotalSizeMB = totalSizeMB,
-					AvailableFreeSpaceMB = availableFreeSpaceMB,
-					Uptime = uptime
-				};
-				string json = JsonConvert.SerializeObject(systemInfoData);
+        public static async Task Main(string[] args)
+        {
+            systemInfo = new SystemInfo.SystemInfo();
+            mqtt = new MQTT.mqtt();
 
-				/*Console.WriteLine($"Overall CPU Usage: {cpuUsage:F2}%");
+            // Create and configure System.Timers.Timer (every second)
+            System.Timers.Timer timer1 = new System.Timers.Timer(1000);
+            timer1.Elapsed += Timer1Elapsed;
+            timer1.Start();
 
-				Console.WriteLine($"Total Memory: {totalMemory / (1024 * 1024):N2} MB");
-				Console.WriteLine($"Free Memory: {freeMemory / (1024 * 1024):N2} MB");
-				Console.WriteLine($"Used Memory: {usedMemory / (1024 * 1024):N2} MB");
-				Console.WriteLine($"File System: {fileSystem}");
-				Console.WriteLine($"Total Size: {totalSizeMB} MB");
-				Console.WriteLine($"Available Free Space: {availableFreeSpaceMB} MB");
+            // Create and configure System.Timers.Timer (every 30 seconds)
+            System.Timers.Timer timer2 = new System.Timers.Timer(30000);
+            timer2.Elapsed += Timer2Elapsed;
+            timer2.Start();
 
-				Console.WriteLine($"Upitme: {uptime}");*/
+            Console.WriteLine("Press Enter to exit.");
+            Console.ReadLine();
 
-				mqtt.Publish_Application_Message(json);
+            // Dispose of resources, if necessary
+            timer1.Dispose();
+            timer2.Dispose();
+        }
 
-				System.Threading.Thread.Sleep(1000); 
-			}
+        private static async void Timer1Elapsed(object sender, ElapsedEventArgs e)
+        {
+            double cpuUsage = systemInfo.getCpuUsage;
+            (ulong totalMemory, ulong freeMemory, ulong usedMemory) = systemInfo.getMemoryUsage;
+            (string fileSystem, long totalSizeMB, long availableFreeSpaceMB) = systemInfo.getDiskInfo;
+            TimeSpan uptime = systemInfo.getSystemUptime;
+            var systemInfoData = new
+            {
+                CpuUsage = cpuUsage,
+                TotalMemoryMB = totalMemory / (1024 * 1024),
+                FreeMemoryMB = freeMemory / (1024 * 1024),
+                UsedMemoryMB = usedMemory / (1024 * 1024),
+                FileSystem = fileSystem,
+                TotalSizeMB = totalSizeMB,
+                AvailableFreeSpaceMB = availableFreeSpaceMB,
+                Uptime = uptime
+            };
+            string json = JsonConvert.SerializeObject(systemInfoData);
+
+            await mqtt.Publish_Application_Message(json, topic);
+        }
+
+		private static async void Timer2Elapsed(object sender, ElapsedEventArgs e)
+        {
+			Console.WriteLine("");
+			Console.WriteLine("Test");
+			Console.WriteLine("");
 		}
-	}
+    }
 }
-

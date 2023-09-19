@@ -11,7 +11,7 @@ namespace MQTT
 {
 	public class mqtt
 	{
-		public static async Task Publish_Application_Message(string json)
+		public static async Task Publish_Application_Message(string json, string topic)
 		{
 
 			var mqttFactory = new MqttFactory();
@@ -25,8 +25,9 @@ namespace MQTT
 				await mqttClient.ConnectAsync(mqttClientOptions, CancellationToken.None);
 
 				var applicationMessage = new MqttApplicationMessageBuilder()
-					.WithTopic("test/test123")
+					.WithTopic(topic)
 					.WithPayload(json)
+					//.WithQualityOfServiceLevel(MqttQualityOfServiceLevel.AtLeastOnce)
 					.Build();
 
 				await mqttClient.PublishAsync(applicationMessage, CancellationToken.None);
