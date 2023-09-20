@@ -12,9 +12,10 @@ namespace ServerApp
     {
         private static SystemInfo.SystemInfo systemInfo;
         private static MQTT.mqtt mqtt;
-        private static string topic = "test/test123";
+        private static string topic1 = "test/test123";
+		private static string topic2 = "test/test123/onlinecheck";
 
-        public static async Task Main(string[] args)
+		public static async Task Main(string[] args)
         {
             systemInfo = new SystemInfo.SystemInfo();
             mqtt = new MQTT.mqtt();
@@ -56,14 +57,20 @@ namespace ServerApp
             };
             string json = JsonConvert.SerializeObject(systemInfoData);
 
-            await mqtt.Publish_Application_Message(json, topic);
+            await mqtt.Publish_Application_Message(json, topic1);
         }
 
 		private static async void Timer2Elapsed(object sender, ElapsedEventArgs e)
         {
+            Console.WriteLine("");
+			Console.WriteLine("test");
 			Console.WriteLine("");
-			Console.WriteLine("Test");
-			Console.WriteLine("");
+			var test = new
+            {
+                Test = "test",
+            };
+            string json = JsonConvert.SerializeObject(test);
+			await mqtt.Publish_Application_Message(json, topic2);
 		}
     }
 }
