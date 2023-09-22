@@ -30,3 +30,4 @@ D:\Anej\Code\maturitetna-dev\ServerApp\ServerApp\bin\Debug\net6.0\MQTTnet.dll
 D:\Anej\Code\maturitetna-dev\ServerApp\ServerApp\obj\Debug\net6.0\ServerApp.csproj.AssemblyReference.cache
 D:\Anej\Code\maturitetna-dev\ServerApp\ServerApp\obj\Debug\net6.0\ServerApp.csproj.CopyComplete
 D:\Anej\Code\maturitetna-dev\ServerApp\ServerApp\bin\Debug\net6.0\Newtonsoft.Json.dll
+D:\Anej\Code\maturitetna-dev\ServerApp\ServerApp\bin\Debug\net6.0\settings.json

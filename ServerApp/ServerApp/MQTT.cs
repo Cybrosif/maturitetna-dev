@@ -27,7 +27,7 @@ namespace MQTT
 				var applicationMessage = new MqttApplicationMessageBuilder()
 					.WithTopic(topic)
 					.WithPayload(json)
-					//.WithQualityOfServiceLevel(MqttQualityOfServiceLevel.AtLeastOnce)
+					.WithQualityOfServiceLevel(MqttQualityOfServiceLevel.AtLeastOnce)
 					.Build();
 
 				await mqttClient.PublishAsync(applicationMessage, CancellationToken.None);

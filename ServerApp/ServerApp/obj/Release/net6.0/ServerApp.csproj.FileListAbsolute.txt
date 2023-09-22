@@ -30,3 +30,4 @@ D:\Anej\Code\maturitetna-dev\ServerApp\ServerApp\obj\Release\net6.0\ServerApp.pd
 D:\Anej\Code\maturitetna-dev\ServerApp\ServerApp\obj\Release\net6.0\ServerApp.genruntimeconfig.cache
 D:\Anej\Code\maturitetna-dev\ServerApp\ServerApp\obj\Release\net6.0\ref\ServerApp.dll
 D:\Anej\Code\maturitetna-dev\ServerApp\ServerApp\bin\Release\net6.0\Newtonsoft.Json.dll
+D:\Anej\Code\maturitetna-dev\ServerApp\ServerApp\bin\Release\net6.0\settings.json

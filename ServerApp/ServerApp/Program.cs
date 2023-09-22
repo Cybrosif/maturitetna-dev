@@ -5,6 +5,7 @@ using Newtonsoft.Json;
 using SystemInfo;
 using MQTT;
 using MQTTnet.Client;
+using System.Text.Json;
 
 namespace ServerApp
 {
@@ -14,10 +15,14 @@ namespace ServerApp
         private static MQTT.mqtt mqtt;
         private static string topic1 = "test/test123";
 		private static string topic2 = "test/test123/onlinecheck";
+		private static Configuration configuration;
 
 		public static async Task Main(string[] args)
         {
-            systemInfo = new SystemInfo.SystemInfo();
+		 configuration = Configuration.LoadConfiguration();
+
+
+		    systemInfo = new SystemInfo.SystemInfo();
             mqtt = new MQTT.mqtt();
 
             // Create and configure System.Timers.Timer (every second)
@@ -62,12 +67,10 @@ namespace ServerApp
 
 		private static async void Timer2Elapsed(object sender, ElapsedEventArgs e)
         {
-            Console.WriteLine("");
-			Console.WriteLine("test");
-			Console.WriteLine("");
+            string serverID = configuration.serverID;
 			var test = new
             {
-                Test = "test",
+				serverID = serverID,
             };
             string json = JsonConvert.SerializeObject(test);
 			await mqtt.Publish_Application_Message(json, topic2);
