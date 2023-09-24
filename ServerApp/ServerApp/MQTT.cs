@@ -34,7 +34,7 @@ namespace MQTT
 
 				await mqttClient.DisconnectAsync();
 
-				Console.WriteLine("MQTT application message is published.");
+				//Console.WriteLine("MQTT application message is published.");
 			}
 		}
 	}

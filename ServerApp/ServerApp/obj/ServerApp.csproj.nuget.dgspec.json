@@ -40,9 +40,17 @@
         "net6.0": {
           "targetAlias": "net6.0",
           "dependencies": {
+            "Hsu.Daemon": {
+              "target": "Package",
+              "version": "[2023.308.31, )"
+            },
             "MQTTnet": {
               "target": "Package",
               "version": "[4.3.1.873, )"
+            },
+            "Microsoft.Extensions.Hosting": {
+              "target": "Package",
+              "version": "[7.0.1, )"
             },
             "Newtonsoft.Json": {
               "target": "Package",

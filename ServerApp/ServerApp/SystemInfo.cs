@@ -55,7 +55,7 @@ namespace SystemInfo
 			}
 			catch (Exception ex)
 			{
-				Console.WriteLine($"Error: {ex.Message}");
+				//Console.WriteLine($"Error: {ex.Message}");
 				return -1.0; // Error condition.
 			}
 		}
@@ -100,7 +100,7 @@ namespace SystemInfo
 			}
 			catch (Exception ex)
 			{
-				Console.WriteLine($"Error: {ex.Message}");
+				//Console.WriteLine($"Error: {ex.Message}");
 				return new MemoryUsage(); // Error condition.
 			}
 		}
@@ -158,7 +158,7 @@ namespace SystemInfo
 			}
 			catch (Exception ex)
 			{
-				Console.WriteLine($"Error: {ex.Message}");
+				//Console.WriteLine($"Error: {ex.Message}");
 				return new DiskInfo(); // Error condition.
 			}
 			return new DiskInfo();
@@ -178,7 +178,7 @@ namespace SystemInfo
 			}
 			catch (Exception ex)
 			{
-				Console.WriteLine($"Error: {ex.Message}");
+				//Console.WriteLine($"Error: {ex.Message}");
 				return TimeSpan.Zero; // Error condition.
 			}
 		}
