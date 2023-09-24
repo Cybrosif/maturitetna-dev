@@ -1,46 +1,35 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.IO;
+using Newtonsoft.Json;
 
 namespace SystemInfo
 {
 	public class SystemInfo
 	{
-		public double getCpuUsage
+		public string GetSystemInformationJson()
 		{
-			get
-			{
-				return GetCpuUsage();
-			}
+			var systemInformation = GetSystemInformation();
+			return systemInformation.ToJson();
 		}
 
-		public (ulong totalMemory, ulong freeMemory, ulong usedMemory) getMemoryUsage
+		private SystemInformation GetSystemInformation()
 		{
-			get
+			var cpuUsage = GetCpuUsage();
+			var memoryUsage = GetMemoryUsage();
+			var diskInfo = GetDiskInfo("/");
+			var systemUptime = GetSystemUptime();
+
+			return new SystemInformation
 			{
-				return GetMemoryUsage();
-			}
+				CpuUsage = cpuUsage,
+				MemoryUsage = memoryUsage,
+				DiskInfo = diskInfo,
+				SystemUptime = systemUptime
+			};
 		}
 
-		public (string fileSystem, long totalSize, long availableFreeSpace) getDiskInfo
-		{
-			get
-			{
-				return GetDiskInfo("/");
-			}
-		}
-
-		public TimeSpan getSystemUptime
-		{
-			get
-			{
-				return GetSystemUptime();
-			}
-		}
-		private static double GetCpuUsage()
+		private double GetCpuUsage()
 		{
 			try
 			{
@@ -71,15 +60,14 @@ namespace SystemInfo
 			}
 		}
 
-		private static (ulong totalMemory, ulong freeMemory, ulong usedMemory) GetMemoryUsage()
+		private MemoryUsage GetMemoryUsage()
 		{
 			try
 			{
 				using (StreamReader reader = new StreamReader("/proc/meminfo"))
 				{
-					ulong totalMemory = 0;
-					ulong freeMemory = 0;
-					ulong usedMemory = 0;
+					ulong totalMemoryKB = 0;
+					ulong freeMemoryKB = 0;
 
 					string line;
 					while ((line = reader.ReadLine()) != null)
@@ -91,20 +79,29 @@ namespace SystemInfo
 							string value = parts[1].Trim();
 
 							if (key == "MemTotal")
-								totalMemory = ParseMemoryValue(value);
+								totalMemoryKB = ParseMemoryValue(value);
 							else if (key == "MemFree")
-								freeMemory = ParseMemoryValue(value);
+								freeMemoryKB = ParseMemoryValue(value);
 						}
 					}
 
-					usedMemory = totalMemory - freeMemory;
-					return (totalMemory, freeMemory, usedMemory);
+					ulong totalMemoryMB = totalMemoryKB / 1024;
+					ulong freeMemoryMB = freeMemoryKB / 1024;
+					ulong usedMemoryMB = totalMemoryMB - freeMemoryMB;
+
+					return new MemoryUsage
+					{
+						TotalMemory = totalMemoryMB,
+						FreeMemory = freeMemoryMB,
+						UsedMemory = usedMemoryMB
+					};
 				}
+
 			}
 			catch (Exception ex)
 			{
 				Console.WriteLine($"Error: {ex.Message}");
-				return (0, 0, 0); // Error condition.
+				return new MemoryUsage(); // Error condition.
 			}
 		}
 		private static ulong ParseMemoryValue(string value)
@@ -115,12 +112,12 @@ namespace SystemInfo
 			if (ulong.TryParse(value, out ulong result))
 			{
 				// Convert from kilobytes to bytes.
-				return result * 1024;
+				return result;
 			}
 			return 0;
 		}
 
-		private static (string fileSystem, long totalSizeMB, long availableFreeSpaceMB) GetDiskInfo(string mountPoint)
+		private DiskInfo GetDiskInfo(string mountPoint)
 		{
 			try
 			{
@@ -150,20 +147,24 @@ namespace SystemInfo
 						long totalSizeMB = long.Parse(columns[1]);
 						long availableFreeSpaceMB = long.Parse(columns[3]);
 
-						return (fileSystem, totalSizeMB, availableFreeSpaceMB);
+						return new DiskInfo
+						{
+							FileSystem = fileSystem,
+							TotalSizeMB = totalSizeMB,
+							AvailableFreeSpaceMB = availableFreeSpaceMB
+						};
 					}
 				}
-
-				return (null, 0, 0); // Error condition or invalid data.
 			}
 			catch (Exception ex)
 			{
 				Console.WriteLine($"Error: {ex.Message}");
-				return (null, 0, 0); // Error condition.
+				return new DiskInfo(); // Error condition.
 			}
+			return new DiskInfo();
 		}
 
-		private static TimeSpan GetSystemUptime()
+		private TimeSpan GetSystemUptime()
 		{
 			try
 			{
@@ -173,14 +174,51 @@ namespace SystemInfo
 					string[] uptimeFields = uptimeLine.Split(' ');
 					double uptimeSeconds = double.Parse(uptimeFields[0]);
 					return TimeSpan.FromSeconds(uptimeSeconds);
-				}
+				}		
 			}
 			catch (Exception ex)
 			{
 				Console.WriteLine($"Error: {ex.Message}");
+				return TimeSpan.Zero; // Error condition.
 			}
-
-			return TimeSpan.Zero; // Error condition or unable to retrieve uptime.
 		}
+	}
+
+	public class SystemInformation
+	{
+		public double CpuUsage { get; set; }
+		public MemoryUsage MemoryUsage { get; set; }
+		public DiskInfo DiskInfo { get; set; }
+		public TimeSpan SystemUptime { get; set; }
+
+		public string ToJson()
+		{
+			var jsonResult = new
+			{
+				CpuUsage = CpuUsage,
+				TotalMemory = MemoryUsage.TotalMemory,
+				FreeMemory = MemoryUsage.FreeMemory,
+				UsedMemory = MemoryUsage.UsedMemory,
+				FileSystem = DiskInfo.FileSystem,
+				TotalSizeMB = DiskInfo.TotalSizeMB,
+				AvailableFreeSpaceMB = DiskInfo.AvailableFreeSpaceMB,
+				SystemUptime = SystemUptime
+			};
+			return JsonConvert.SerializeObject(jsonResult);
+		}
+	}
+
+	public class MemoryUsage
+	{
+		public ulong TotalMemory { get; set; }
+		public ulong FreeMemory { get; set; }
+		public ulong UsedMemory { get; set; }
+	}
+
+	public class DiskInfo
+	{
+		public string FileSystem { get; set; }
+		public long TotalSizeMB { get; set; }
+		public long AvailableFreeSpaceMB { get; set; }
 	}
 }

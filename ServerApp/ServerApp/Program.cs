@@ -45,7 +45,7 @@ namespace ServerApp
 
         private static async void Timer1Elapsed(object sender, ElapsedEventArgs e)
         {
-            double cpuUsage = systemInfo.getCpuUsage;
+			/*double cpuUsage = systemInfo.getCpuUsage;
             (ulong totalMemory, ulong freeMemory, ulong usedMemory) = systemInfo.getMemoryUsage;
             (string fileSystem, long totalSizeMB, long availableFreeSpaceMB) = systemInfo.getDiskInfo;
             TimeSpan uptime = systemInfo.getSystemUptime;
@@ -60,9 +60,11 @@ namespace ServerApp
                 AvailableFreeSpaceMB = availableFreeSpaceMB,
                 Uptime = uptime
             };
-            string json = JsonConvert.SerializeObject(systemInfoData);
+            string json = JsonConvert.SerializeObject(systemInfoData);*/
 
-            await mqtt.Publish_Application_Message(json, topic1);
+			string jsonSystemInfo = systemInfo.GetSystemInformationJson();
+
+			await mqtt.Publish_Application_Message(jsonSystemInfo, topic1);
         }
 
 		private static async void Timer2Elapsed(object sender, ElapsedEventArgs e)
