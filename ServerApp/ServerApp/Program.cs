@@ -1,79 +1,99 @@
 ﻿using System;
-using System.Timers;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
-using SystemInfo;
-using MQTT;
-using MQTTnet.Client;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Hsu.Daemon;
+using SystemInfo;
+using MQTT;
 
 namespace ServerApp
 {
 	public class Program
 	{
-		private static SystemInfo.SystemInfo systemInfo;
-		private static MQTT.mqtt mqtt;
-		private static string topic1 = "test/test123";
-		private static string topic2 = "test/test123/onlinecheck";
 		private static Configuration configuration;
 
 		public static async Task Main(string[] args)
 		{
 			configuration = Configuration.LoadConfiguration();
 
-			systemInfo = new SystemInfo.SystemInfo();
-			mqtt = new MQTT.mqtt();
-
-			// Create and configure System.Timers.Timer (every second)
-			System.Timers.Timer timer1 = new System.Timers.Timer(1000);
-			timer1.Elapsed += Timer1Elapsed;
-			timer1.Start();
-
-			// Create and configure System.Timers.Timer (every 30 seconds)
-			System.Timers.Timer timer2 = new System.Timers.Timer(15000);
-			timer2.Elapsed += Timer2Elapsed;
-			timer2.Start();
-
 			await CreateHostBuilder(args).Build().RunAsync();
-		}
-
-		private static async void Timer1Elapsed(object sender, ElapsedEventArgs e)
-		{
-			string jsonSystemInfo = systemInfo.GetSystemInformationJson();
-			await mqtt.Publish_Application_Message(jsonSystemInfo, topic1);
-		}
-
-		private static async void Timer2Elapsed(object sender, ElapsedEventArgs e)
-		{
-			string serverID = configuration.serverID;
-			var test = new
-			{
-				serverID = serverID,
-			};
-			string json = JsonConvert.SerializeObject(test);
-			await mqtt.Publish_Application_Message(json, topic2);
 		}
 
 		public static IHostBuilder CreateHostBuilder(string[] args) =>
 			Microsoft.Extensions.Hosting.Host.CreateDefaultBuilder(args)
 				.ConfigureServices((hostContext, services) =>
 				{
-					services.AddHostedService<Worker>();
+					// Add your services here
+
+					// Add systemInfo, mqtt, and configuration as dependencies
+					services.AddSingleton<SystemInfo.SystemInfo>();
+					services.AddSingleton<MQTT.mqtt>();
+					services.AddSingleton(configuration);
+
+					// Configure and add the first Worker background service
+					services.AddHostedService<Worker1>();
+
+					// Configure and add the second Worker background service
+					services.AddHostedService<Worker2>();
 				});
 	}
 
-	public class Worker : BackgroundService
+	public class Worker1 : BackgroundService
 	{
+		private readonly SystemInfo.SystemInfo systemInfo;
+		private readonly MQTT.mqtt mqtt;
+		private readonly string topic1;
+
+		public Worker1(SystemInfo.SystemInfo systemInfo, MQTT.mqtt mqtt)
+		{
+			this.systemInfo = systemInfo;
+			this.mqtt = mqtt;
+			this.topic1 = "test/test123";
+		}
+
 		protected override async Task ExecuteAsync(CancellationToken stoppingToken)
 		{
-			// Add any long-running background tasks here.
 			while (!stoppingToken.IsCancellationRequested)
 			{
 				// Your background service logic here
+				string jsonSystemInfo = systemInfo.GetSystemInformationJson();
+				await mqtt.Publish_Application_Message(jsonSystemInfo, topic1);
 
-				await Task.Delay(1000, stoppingToken); // Adjust the delay as needed
+				// Adjust the delay as needed
+				await Task.Delay(1000, stoppingToken); // Publish the first message every second
+			}
+		}
+	}
+
+	public class Worker2 : BackgroundService
+	{
+		private readonly MQTT.mqtt mqtt;
+		private readonly string topic2;
+		private readonly Configuration configuration;
+
+		public Worker2(MQTT.mqtt mqtt, Configuration configuration)
+		{
+			this.mqtt = mqtt;
+			this.configuration = configuration;
+			this.topic2 = "test/test123/onlinecheck";
+		}
+
+		protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+		{
+			while (!stoppingToken.IsCancellationRequested)
+			{
+				// Your background service logic here
+				string serverID = configuration.serverID;
+				var test = new
+				{
+					serverID = serverID,
+				};
+				string json = JsonConvert.SerializeObject(test);
+				await mqtt.Publish_Application_Message(json, topic2);
+
+				// Adjust the delay as needed
+				await Task.Delay(15000, stoppingToken); // Publish the second message every 15 seconds
 			}
 		}
 	}
